@@ -15,6 +15,8 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
+import thkContract.BusinessObj;
+import thkContract.BusinessObjListResult;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
@@ -120,7 +122,37 @@ public class FunctionReturnDecoder {
                             input, hexStringDataOffset, typeReference, length);
                     offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-                } else {
+                } else if (BusinessObj.class.isAssignableFrom(type)) {
+//                    int length = Integer.parseInt(type.getSimpleName()
+//                            .substring(StaticArray.class.getSimpleName().length()));
+//                    result = TypeDecoder.decodeStaticArray(
+//                            input, hexStringDataOffset, typeReference, length);
+//                    offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+
+                     BusinessObj.BusinessObjResult decodeBusinessObj= decodeBusinessObj(input, offset);
+                     result=(BusinessObj)decodeBusinessObj;
+                     offset=decodeBusinessObj.getOffset();
+
+                } else if (BusinessObjListResult.class.isAssignableFrom(type)) {
+                    offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
+                    int resultCode= org.web3j.abi.TypeDecoder.decodeUintAsInt(input,offset);
+                    System.out.println(resultCode);
+                    offset += resultCode*MAX_BYTE_LENGTH_FOR_HEX_STRING;
+
+                    BusinessObjListResult objListResult=new BusinessObjListResult();
+
+                    List<BusinessObj> businessObjList=new ArrayList<>();
+                    for (Integer i=0;i<resultCode;i++){
+                        System.out.println(i.toString()+":==> "+offset);
+                        BusinessObj.BusinessObjResult decodeBusinessObj= decodeBusinessObj(input, offset);
+                        BusinessObj resultInfo=(BusinessObj)decodeBusinessObj;
+                        offset=decodeBusinessObj.getOffset();
+                        businessObjList.add(resultInfo);
+                    }
+                    objListResult.setBusinessObjList(businessObjList);
+                    result=objListResult;
+                }
+                else {
                     result = TypeDecoder.decode(input, hexStringDataOffset, type);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 }
@@ -131,6 +163,32 @@ public class FunctionReturnDecoder {
             }
         }
         return results;
+    }
+
+    public   static BusinessObj.BusinessObjResult decodeBusinessObj(String inputCode, int offset) {
+        BusinessObj.BusinessObjResult result=new BusinessObj.BusinessObjResult();
+
+        String input=inputCode;
+        String destr="0000000000000000000000000000000000000000000000000000000000000020";
+        input=input.substring(destr.length());
+
+        //datano
+        int valueOffset = offset+MAX_BYTE_LENGTH_FOR_HEX_STRING+MAX_BYTE_LENGTH_FOR_HEX_STRING;
+        Utf8String d= TypeDecoder.decodeUtf8String(input, valueOffset);
+        System.out.println(d);
+        result.setDataNo(d.toString());
+
+        //data
+        int encodedLength = TypeDecoder.decodeUintAsInt(input, valueOffset);
+        valueOffset = valueOffset + ((encodedLength / Type.MAX_BYTE_LENGTH) + 2) * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+        Utf8String  d1= TypeDecoder.decodeUtf8String(input, valueOffset);
+        result.setData(d1.toString());
+
+        encodedLength = TypeDecoder.decodeUintAsInt(input, valueOffset);
+        valueOffset = valueOffset + ((encodedLength / Type.MAX_BYTE_LENGTH) + 2) * MAX_BYTE_LENGTH_FOR_HEX_STRING;
+
+        result.setOffset(valueOffset);
+        return result;
     }
 
     private static <T extends Type> int getDataOffset(String input, int offset, Class<T> type) {

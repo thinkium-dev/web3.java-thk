@@ -38,4 +38,18 @@ public class BusinessObj implements Type {
     public String getTypeAsString() {
         return "(string,string)";
     }
+
+
+
+    public  static class   BusinessObjResult extends   BusinessObj{
+        public Integer getOffset() {
+            return offset;
+        }
+
+        public void setOffset(Integer offset) {
+            this.offset = offset;
+        }
+
+        private Integer offset;
+    }
 }
