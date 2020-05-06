@@ -13,9 +13,9 @@ contract Greeter {
     }
 
     function greet() view public  returns ( string [] memory ret)  {
-        string[] memory b = new string[](2) ;
-        b[0] = "hello1";
-        b[1] = "world";
-        ret = b;
-    }
+             string[] memory b = new string[](2) ;
+             b[0] = "hello1";
+             b[1] = "world";
+             ret = b;
+         }
 }

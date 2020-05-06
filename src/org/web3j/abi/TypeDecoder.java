@@ -27,7 +27,6 @@ import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint160;
 import org.web3j.utils.Numeric;
-import thkContract.BusinessObj;
 
 /**
  * <p>Ethereum Contract Application Binary Interface (ABI) decoding for types.
@@ -71,13 +70,11 @@ public class TypeDecoder {
         } else if (Array.class.isAssignableFrom(type)) {
             throw new UnsupportedOperationException(
                     "Array types must be wrapped in a TypeReference");
-        }else {
+        } else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + type.getClass());
         }
     }
-
-
 
     public static <T extends Array> T decode(
             String input, int offset, TypeReference<T> typeReference) {

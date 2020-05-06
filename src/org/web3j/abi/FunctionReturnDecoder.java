@@ -15,7 +15,6 @@ import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Bytes32;
 import org.web3j.utils.Numeric;
 import org.web3j.utils.Strings;
-import thkContract.BusinessObj;
 import thkContract.BusinessObjListResult;
 
 import static org.web3j.abi.TypeDecoder.MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -129,9 +128,9 @@ public class FunctionReturnDecoder {
 //                            input, hexStringDataOffset, typeReference, length);
 //                    offset += length * MAX_BYTE_LENGTH_FOR_HEX_STRING;
 
-                     BusinessObj.BusinessObjResult decodeBusinessObj= decodeBusinessObj(input, offset);
-                     result=(BusinessObj)decodeBusinessObj;
-                     offset=decodeBusinessObj.getOffset();
+                    BusinessObj.BusinessObjResult decodeBusinessObj= decodeBusinessObj(input, offset);
+                    result=(BusinessObj)decodeBusinessObj;
+                    offset=decodeBusinessObj.getOffset();
 
                 } else if (BusinessObjListResult.class.isAssignableFrom(type)) {
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
@@ -151,8 +150,7 @@ public class FunctionReturnDecoder {
                     }
                     objListResult.setBusinessObjList(businessObjList);
                     result=objListResult;
-                }
-                else {
+                }else {
                     result = TypeDecoder.decode(input, hexStringDataOffset, type);
                     offset += MAX_BYTE_LENGTH_FOR_HEX_STRING;
                 }
@@ -164,7 +162,6 @@ public class FunctionReturnDecoder {
         }
         return results;
     }
-
     public   static BusinessObj.BusinessObjResult decodeBusinessObj(String inputCode, int offset) {
         BusinessObj.BusinessObjResult result=new BusinessObj.BusinessObjResult();
 

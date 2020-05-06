@@ -16,27 +16,9 @@ public class Transaction {
     private  String  nonce;
     private  String  value;
     private  String  input;
-
-    private  Boolean  useLocal;
-    private  String  extra;
-    public Boolean getUseLocal() {
-        return useLocal;
-    }
-
-    public void setUseLocal(Boolean useLocal) {
-        this.useLocal = useLocal;
-    }
-
-    public String getExtra() {
-        return extra;
-    }
-
-    public void setExtra(String extra) {
-        this.extra = extra;
-    }
-
   //  private  int  ExpireHeight;
-
+    private  Boolean useLocal;
+    private  String  extra;
     public String getChainId() {
         return chainId;
     }
@@ -126,4 +108,19 @@ public class Transaction {
 //    }
 
 
+    public Boolean getUseLocal() {
+        return useLocal;
+    }
+
+    public void setUseLocal(Boolean useLocal) {
+        this.useLocal = useLocal;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
 }

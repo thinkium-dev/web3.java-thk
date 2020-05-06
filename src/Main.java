@@ -16,13 +16,14 @@ public class Main {
         //thkUtils.privateKey="";
 
         web3.Thk web3=new web3.Thk();
-        web3.setUrl("");
+        web3.setUrl("http://rpcproxy.xinjikeji.cn");
+
 
         String  chainId2="1";
         String  chainId3="3";
 
-
-
+       //【生成 公私钥】
+       //utils-> CreatePrivateKey 类
 
         // 1. 获取对应账户金额
 
@@ -101,22 +102,16 @@ public class Main {
         //获取ecKeyPair 用于生成签名
         ECKeyPair ecKeyPair=thkUtils.GetECKeyPair();
 
-
-
         Transaction transaction=new Transaction();
         transaction.setChainId("1");
         transaction.setFrom("0x2c7536e3605d9c16a7a3d7b1898e529396a65c23");
         transaction.setTo("0x6ea0fefc17c877c7a4b0f139728ed39dc134a967");
         transaction.setToChainId("1");
         transaction.setFromChainId("1");
-
-        String nonceVal=  web3.GetNonce(transaction.getChainId(),transaction.getFrom())+"";
-        transaction.setNonce(nonceVal); //可自动获取
+        //transaction.setNonce("33"); //可自动获取
         transaction.setValue("2333");
         transaction.setInput("");
         transaction.setPub(pub);
-        transaction.setUseLocal(false);
-        transaction.setExtra("");
 
 
 //      String sig=thkUtils.CreateSig(ecKeyPair,from,to,chainId2,fromChainId,toChainId,nonce,value,input);
@@ -139,17 +134,17 @@ public class Main {
         System.out.println(result_CommitteeInfo);
 
 //        //10  从合约中读取本地节点的数据
-        Transaction info_call=new Transaction();
-        info_call.setChainId("1");
-        info_call.setFrom("0x0000000000000000000000000000000000000000");
-        info_call.setTo("0x0e50cea0402d2a396b0db1c5d08155bd219cc52e");
-        info_call.setNonce("15");
-        info_call.setValue("0");
-        info_call.setInput("0xdfc02018");
-        info_call.setFromChainId("1");
-        info_call.setToChainId("1");
-        Map calltrResult=web3.CallTransaction(info_call);
-        System.out.println(calltrResult);
+//        Transaction info_call=new Transaction();
+//        info_call.setChainId("1");
+//        info_call.setFrom("0x0000000000000000000000000000000000000000");
+//        info_call.setTo("0x0e50cea0402d2a396b0db1c5d08155bd219cc52e");
+//        info_call.setNonce("15");
+//        info_call.setValue("0");
+//        info_call.setInput("0xdfc02018");
+//        info_call.setFromChainId("1");
+//        info_call.setToChainId("1");
+//        Map calltrResult=web3.CallTransaction(info_call);
+//        System.out.println(calltrResult);
 
 
 

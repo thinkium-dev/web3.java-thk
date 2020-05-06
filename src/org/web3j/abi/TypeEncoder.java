@@ -1,34 +1,18 @@
 package org.web3j.abi;
 
+import org.web3j.abi.datatypes.*;
+import utils.Numeric;
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Array;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Bytes;
-import org.web3j.abi.datatypes.BytesType;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.DynamicBytes;
-import org.web3j.abi.datatypes.NumericType;
-import org.web3j.abi.datatypes.StaticArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Ufixed;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.utils.Numeric;
-import thkContract.BusinessObj;
-
 import static org.web3j.abi.datatypes.Type.MAX_BIT_LENGTH;
 import static org.web3j.abi.datatypes.Type.MAX_BYTE_LENGTH;
 
 /**
- * <p>Ethereum Contract Application Binary Interface (ABI) encoding for types.
- * Further details are available
- * <a href="https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI">here</a>.
- * </p>
+ * Created by thk on 6/19/19.
  */
 public class TypeEncoder {
 
@@ -58,12 +42,56 @@ public class TypeEncoder {
             return encodeArrayValues((StaticArray) parameter);
         } else if (parameter instanceof DynamicArray) {
             return encodeDynamicArray((DynamicArray) parameter);
-        }
-        else {
+        } else if (parameter instanceof BusinessObj) {
+            return encodeTestDataInfo((BusinessObj) parameter);
+        }else {
             throw new UnsupportedOperationException(
                     "Type cannot be encoded: " + parameter.getClass());
         }
     }
+
+    //----------------
+    //--------------------------------
+    private static String encodeTestDataInfo(BusinessObj dataInfo) {
+        List<Type> parameters= Arrays.asList(new Utf8String(dataInfo.getDataNo()),new Utf8String(dataInfo.getData()));
+        int dynamicDataOffset = getLength(parameters) * Type.MAX_BYTE_LENGTH;
+        StringBuilder dynamicData = new StringBuilder();
+        StringBuilder result = new StringBuilder();
+        for (Type parameter:parameters) {
+            String encodedValue = thkContract.TypeEncoder.encode(parameter);
+
+            if (isDynamic(parameter)) {
+                String encodedDataOffset = encodeNumeric(
+                        new Uint(BigInteger.valueOf(dynamicDataOffset)));
+                result.append(encodedDataOffset);
+                dynamicData.append(encodedValue);
+                dynamicDataOffset += encodedValue.length() >> 1;
+            } else {
+                result.append(encodedValue);
+            }
+        }
+        result.append(dynamicData);
+
+        String subStr=result.toString();
+        System.out.println("0000000000000000000000000000000000000000000000000000000000000020"+subStr);
+         String resultCode="0000000000000000000000000000000000000000000000000000000000000020"+subStr;
+       // return result.toString();
+        return resultCode;
+    }
+    private static int getLength(List<Type> parameters) {
+        int count = 0;
+        for (Type type:parameters) {
+            if (type instanceof StaticArray) {
+                count += ((StaticArray) type).getValue().size();
+            } else {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    //--------------------------------------
+    //
 
     static String encodeAddress(Address address) {
         return encodeNumeric(address.toUint160());
@@ -152,7 +180,7 @@ public class TypeEncoder {
     static <T extends Type> String encodeArrayValues(Array<T> value) {
         StringBuilder result = new StringBuilder();
         for (Type type:value.getValue()) {
-            result.append(TypeEncoder.encode(type));
+            result.append(org.web3j.abi.TypeEncoder.encode(type));
         }
         return result.toString();
     }
@@ -173,9 +201,9 @@ public class TypeEncoder {
     private static <T extends Type> String encodeArrayValuesOffsets(DynamicArray<T> value) {
         StringBuilder result = new StringBuilder();
         boolean arrayOfBytes = !value.getValue().isEmpty()
-                                       && value.getValue().get(0) instanceof DynamicBytes;
+                && value.getValue().get(0) instanceof DynamicBytes;
         boolean arrayOfString = !value.getValue().isEmpty()
-                                        && value.getValue().get(0) instanceof Utf8String;
+                && value.getValue().get(0) instanceof Utf8String;
         if (arrayOfBytes || arrayOfString) {
             long offset = 0;
             for (int i = 0; i < value.getValue().size(); i++) {

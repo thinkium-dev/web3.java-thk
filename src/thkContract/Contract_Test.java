@@ -39,8 +39,8 @@ public class Contract_Test {
         //设置服务器地址
         Thk web3=new Thk();
 
-        //web3.setUrl("");
-        web3.setUrl("http://rpcproxy.thinkey.xyz");
+        web3.setUrl("http://rpcproxy.xinjikeji.cn");
+
 
 
         Transaction info=new Transaction();
@@ -67,8 +67,6 @@ public class Contract_Test {
         info.setValue("0");
         info.setInput("");
         info.setPub(thkUtils.GetPublicKey());
-        info.setUseLocal(false);
-        info.setExtra("");
 
 
         String getnotnce=  web3.GetNonce(info.getChainId(),info.getFrom())+"";

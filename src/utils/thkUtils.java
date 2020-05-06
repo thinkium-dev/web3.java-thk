@@ -63,7 +63,6 @@ public class thkUtils {
      * 生成签名函数
      *
      * */
-    @Deprecated
     public   static  String CreateSig(ECKeyPair keyPair,String  from, String  to,String  chainId,String  fromChainId,String  toChainId,String Nonce,String  value,String  input)
     {
         if (to.length()>2){
@@ -131,31 +130,7 @@ public class thkUtils {
             from =from.substring(2,from.length());
         }
 
-        String u="";
-        String extra="";
-
-        if (info.getUseLocal()){
-            u="1";
-        }else{
-            u="0";
-        }
-
-        if (!info.getExtra().isEmpty()){
-            //extra=extra.replace("0x","");
-        }
-
-
-        //String jionstr=info.getChainId()+from+to+info.getNonce()+info.getValue()+input;
-        String sfix="-";
-        String jionstr=info.getChainId()+sfix
-                +from+sfix
-                +to+sfix
-                +info.getNonce()+sfix
-                +u+sfix
-                +info.getValue()+sfix
-                +input+sfix
-                +extra;
-
+        String jionstr=info.getChainId()+from+to+info.getNonce()+info.getValue()+input;
         byte[] messageHash;
         messageHash = Hash.sha3(jionstr.getBytes());
         // System.out.println("messageHash:  "+messageHash);

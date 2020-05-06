@@ -2,9 +2,9 @@ package thkContract;
 
 import com.alibaba.fastjson.JSON;
 import models.vo.Transaction;
+import org.web3j.abi.BusinessObj;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
@@ -37,8 +37,8 @@ public class Contract_Test2 {
         //设置服务器地址
         Thk web3=new Thk();
 
-        //web3.setUrl("");
-        web3.setUrl("");
+
+        web3.setUrl("http://rpcproxy.xinjikeji.cn");
 
 
         Transaction info=new Transaction();
@@ -65,9 +65,6 @@ public class Contract_Test2 {
         info.setValue("0");
         info.setInput("");
         info.setPub(thkUtils.GetPublicKey());
-        info.setUseLocal(false);
-        info.setExtra("");
-
 
         String getnotnce=  web3.GetNonce(info.getChainId(),info.getFrom())+"";
         info.setNonce(getnotnce);
@@ -107,7 +104,6 @@ public class Contract_Test2 {
             testDataInfo.setDataNo("a");
             testDataInfo.setData("b");
 
-
             Function function1 = new Function("createObj", Arrays.asList(testDataInfo),  Collections.emptyList());
             Map resultSend= Contract.Send(web3,info,function1);
             System.out.println("resultSend : "+resultSend);
@@ -120,9 +116,9 @@ public class Contract_Test2 {
             Map resultx1=  web3.GetTransactionByHash(chainId22,Txhash);
             System.out.println(resultx1);
 
-            //添加集合
-            if(1==1){
 
+            //测试接受集合返回
+            if(1==1){
                 BusinessObj testDataInfo2=new BusinessObj();
                 testDataInfo2.setDataNo("a2");
                 testDataInfo2.setData("b2");
@@ -144,11 +140,15 @@ public class Contract_Test2 {
             }
 
 
-           // Function function = new Function("getObjsNum", Arrays.asList(),Arrays.asList(new TypeReference<Int64>() { }));
-           // Function function = new Function("getObjById", Arrays.asList(new Utf8String("a")),Arrays.asList(new TypeReference<BusinessObj>() { }));
 
-            Function function = new Function("getAllObjs", Arrays.asList(new Uint64(1),new Uint64(5)),Arrays.asList(new TypeReference<Int64>() { },new TypeReference<Int64>() { },new TypeReference<Int64>() { },
+            //Function function = new Function("getObjsNum", Arrays.asList(),Arrays.asList(new TypeReference<Int64>() { }));
+            //Function function = new Function("greet", Arrays.asList(),Arrays.asList(new TypeReference<DynamicArray<Utf8String>>() { }));
+
+
+ //           Function function = new Function("getObjById", Arrays.asList(new Utf8String("a")),Arrays.asList(new TypeReference<BusinessObj>() { }));
+            Function function = new Function("getAllObjs", Arrays.asList(new Uint64(1),new Uint64(5)),Arrays.asList(new TypeReference<Int64>() { }, new TypeReference<Int64>() { }, new TypeReference<Int64>() { },
                     new TypeReference<BusinessObjListResult>() { }));
+
             Map resultCall= Contract.Call(web3,info,function);
             System.out.println("resultCall:"+resultCall);
 
@@ -158,14 +158,15 @@ public class Contract_Test2 {
             //out Greetings!!
             //System.out.println("output...:"+utf8Strings);
 
-//           1.  string list
+             // 1. 打印字符返回
 //            for (Type t:utf8Strings) {
 //                System.out.println("output...:"+t.getValue().toString());
 //            }
+            //2.  obj 返回打印
+            System.out.println("resultData:"+JSON.toJSONString(utf8Strings));
 
-            //2.  obj
-            System.out.println(JSON.toJSONString(utf8Strings));
 
+            System.out.println();
 
         }catch (Exception ex)
         {

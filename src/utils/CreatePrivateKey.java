@@ -29,7 +29,8 @@ public class CreatePrivateKey {
 
         //test
         //ECKeyPair ecKeyPair = ECKeyPair.create(sha256(seed));
-        ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.hexStringToByteArray("0x5027156baafa0758473862ca54acd4690f0426ab267186b4324661b474576989"));
+        //ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.hexStringToByteArray("0x5027156baafa0758473862ca54acd4690f0426ab267186b4324661b474576989"));
+        ECKeyPair ecKeyPair = ECKeyPair.create(Numeric.hexStringToByteArray("123456"));
 
         String priKeyWithPrefix = Numeric.toHexStringWithPrefix(ecKeyPair.getPrivateKey());
         String pubKeyWithPrefix = Numeric.toHexStringWithPrefix(ecKeyPair.getPublicKey());

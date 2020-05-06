@@ -1,5 +1,6 @@
 package thkContract;
 
+import org.web3j.abi.BusinessObj;
 import org.web3j.abi.datatypes.*;
 import utils.Numeric;
 
@@ -74,8 +75,8 @@ public class TypeEncoder {
 
         String subStr=result.toString();
         System.out.println("0000000000000000000000000000000000000000000000000000000000000020"+subStr);
-         String resultCode="0000000000000000000000000000000000000000000000000000000000000020"+subStr;
-       // return result.toString();
+        String resultCode="0000000000000000000000000000000000000000000000000000000000000020"+subStr;
+        // return result.toString();
         return resultCode;
     }
     private static int getLength(List<Type> parameters) {

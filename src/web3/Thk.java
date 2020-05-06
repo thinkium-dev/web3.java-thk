@@ -166,8 +166,6 @@ public class Thk {
         map.put("nonce",info.getNonce());
         map.put("value",info.getValue());
         map.put("input",info.getInput());
-        map.put("useLocal",info.getUseLocal());
-        map.put("extra",info.getExtra());
         //map.put("ExpireHeight",ExpireHeight);
 
         String jsonObj = JSONObject.toJSONString(map);
@@ -265,8 +263,7 @@ public class Thk {
         map.put("input",info.getInput());
         map.put("fromChainId",info.getFromChainId());
         map.put("toChainId",info.getToChainId());
-        map.put("useLocal",false);
-        map.put("extra",false);
+
         String jsonObj = JSONObject.toJSONString(map);
         String postJson="{\"method\": \"CallTransaction\",\"params\": "+jsonObj+"}";
         String result=Post(Url,postJson);

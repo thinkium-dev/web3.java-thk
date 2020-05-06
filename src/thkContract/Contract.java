@@ -1,6 +1,5 @@
 package thkContract;
 
-import com.alibaba.fastjson.JSON;
 import models.vo.Transaction;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
@@ -48,22 +47,7 @@ public class Contract {
         //获取ecKeyPair 用于生成签名
         ECKeyPair ecKeyPair=thkUtils.GetECKeyPair();
 
-        Transaction transaction=new Transaction();
-
-        transaction.setFrom(info.getFrom());
-        transaction.setTo(info.getTo());
-        transaction.setChainId(info.getChainId());
-        transaction.setToChainId(info.getToChainId());
-        transaction.setNonce(info.getNonce());
-        transaction.setValue(info.getValue());
-        transaction.setInput(info.getInput());
-        transaction.setExtra("");
-        transaction.setUseLocal(false);
-
-        String getSig=thkUtils.CreateSig(ecKeyPair,info);
-
-        //String getSig=thkUtils.CreateSig(ecKeyPair,info.getFrom(),info.getTo(), info.getChainId(),info.getFromChainId(),info.getToChainId(),info.getNonce(),info.getValue(),info.getInput());
-
+        String getSig=thkUtils.CreateSig(ecKeyPair,info.getFrom(),info.getTo(), info.getChainId(),info.getFromChainId(),info.getToChainId(),info.getNonce(),info.getValue(),info.getInput());
 
         info.setPub(pub);
         info.setSig(getSig);
@@ -86,8 +70,7 @@ public class Contract {
         String pub= thkUtils.GetPublicKey();
         //获取ecKeyPair 用于生成签名
         ECKeyPair ecKeyPair=thkUtils.GetECKeyPair();
-       // String getSig=thkUtils.CreateSig(ecKeyPair,info.getFrom(),info.getTo(), info.getChainId(),info.getFromChainId(),info.getToChainId(),info.getNonce(),info.getValue(),info.getInput());
-        String getSig=thkUtils.CreateSig(ecKeyPair,info);
+        String getSig=thkUtils.CreateSig(ecKeyPair,info.getFrom(),info.getTo(), info.getChainId(),info.getFromChainId(),info.getToChainId(),info.getNonce(),info.getValue(),info.getInput());
         info.setPub(pub);
         info.setSig(getSig);
 

@@ -24,7 +24,10 @@ web3.setUrl("");
     
     
 
-# THK Java SDK接口文档
+# Thinkey Java SDK接口文档
+# 准备账号：生成公私钥和地址
+   【生成 公私钥】
+    utils-> CreatePrivateKey 类
 
 # 1. 获取账户余额(web3.GetAccount)
 
@@ -827,4 +830,3 @@ Response Body:
     "0x6b81e535a8f7b0a3ed746d46e6e1248ebf001650c078f27056a20f00a2c9d3c369865872ba01dcf95485b3dfcfd921a6239b6690166e47ec47ade0e6aea593c1"
 ]
 ```
-# web3.java-thk
