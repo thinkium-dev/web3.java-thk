@@ -40,7 +40,7 @@ public class Contract_Test {
         Thk web3=new Thk();
 
         //web3.setUrl("");
-        web3.setUrl("");
+        web3.setUrl("http://rpcproxy.thinkey.xyz");
 
 
         Transaction info=new Transaction();
