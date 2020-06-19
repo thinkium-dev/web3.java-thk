@@ -2,7 +2,16 @@ import com.alibaba.fastjson.JSONArray;
 import models.vo.MakeCCCExistenceProof;
 import models.vo.RpcMakeVccProof;
 import models.vo.Transaction;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.generated.Uint256;
+import thkContract.FunctionEncoder;
 import utils.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 
@@ -125,6 +134,42 @@ public class Main {
 
         transaction.setSig(sig);
         Map mapresult=web3.SendTx(transaction);
+
+        System.out.println(mapresult);
+
+        //7-1  合约内xto转账
+        web3.setUrl("http://rpctest.thinkey.xyz");
+        thkUtils.setPrivateKey("0xfef5a8b3d24d6aa98ac099cd0f13e9a825fe764f43aca0a20e0c6b79b54f7a1a");
+        pub=thkUtils.GetPublicKey();
+        ecKeyPair=thkUtils.GetECKeyPair();
+        transaction=new Transaction();
+        transaction.setChainId("103");
+        transaction.setFrom("0xd2e723c9e409ef2edb17a573351960b106b8ad0f");
+        transaction.setTo("0xfce16d719cea6c2674457d695a465974411b6fd9");
+        transaction.setToChainId("103");
+        transaction.setFromChainId("103");
+        nonceVal = web3.GetNonce(transaction.getChainId(), transaction.getFrom()) + "";
+        transaction.setNonce(nonceVal); //可自动获取
+        transaction.setValue("0");
+
+        List<Type> list = new ArrayList<>();
+        Address recipient=new Address("0x28ef7e4990efa0e6f50f0e4b0204fc5e202b2e2c");
+        list.add(recipient);
+        Uint256 amount = new Uint256(7);
+        list.add(amount);
+
+        Function function = new Function("transfer",list,  Collections.emptyList());
+
+        String input= FunctionEncoder.encode(function);
+        transaction.setInput(input);
+        transaction.setPub(pub);
+        transaction.setUseLocal(false);
+        transaction.setExtra("");
+
+        sig=thkUtils.CreateSig(ecKeyPair,transaction);
+
+        transaction.setSig(sig);
+        mapresult=web3.SendTx(transaction);
 
         System.out.println(mapresult);
 
